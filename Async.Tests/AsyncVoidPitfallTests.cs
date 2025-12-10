@@ -16,4 +16,12 @@ public class AsyncVoidPitfallTests
         // The method returns immediately, exception happens later
         // and cannot be observed by the caller
     }
+
+    [Test]
+    public void AsyncTask_ExceptionCanBeCaught()
+    {
+        var sut = new AsyncVoidPitfall();
+
+        Assert.ThrowsAsync<InvalidOperationException>(async () => await sut.ProcessDataGoodAsync());
+    }
 }
