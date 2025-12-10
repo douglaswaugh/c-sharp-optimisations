@@ -7,7 +7,7 @@ A comprehensive list of 100 C# optimization problems and concepts, organized by 
 
 ## 1. Async/Await (15 items)
 
-- [ ] 1. **Async void pitfall** - Why `async void` should only be used for event handlers (exceptions, fire-and-forget issues)
+- [x] 1. **Async void pitfall** - Why `async void` should only be used for event handlers (exceptions, fire-and-forget issues)
 - [ ] 2. **ConfigureAwait(false)** - When and why to use it in library code to avoid deadlocks
 - [ ] 3. **Task.Run vs async/await** - Understanding when Task.Run is appropriate vs unnecessary thread pool usage
 - [ ] 4. **Async over sync anti-pattern** - Why wrapping sync code in Task.Run is usually wrong
