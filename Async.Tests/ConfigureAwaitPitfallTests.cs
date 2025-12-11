@@ -45,6 +45,35 @@ public class ConfigureAwaitPitfallTests
             "Expected deadlock - GetDataBadAsync().Result should deadlock when called from a single-threaded context");
     }
 
+    [Test]
+    public void GetDataGoodAsync_DeadlocksWithSingleThreadedContext()
+    {
+        var deadlockDetected = false;
+
+        var thread = new Thread(() =>
+        {
+            var syncContext = new SingleThreadedSynchronizationContext();
+            SynchronizationContext.SetSynchronizationContext(syncContext);
+
+            var sut = new ConfigureAwaitPitfall();
+
+            // .Result blocks the current thread - this will deadlock because:
+            // - We're blocking this thread with .Result
+            // - The await continuation needs to run on this thread (captured context)
+            // - But this thread is blocked waiting for .Result
+            var result = sut.GetDataGoodAsync().Result;
+        });
+
+        thread.Start();
+
+        // If Join times out, the thread is still blocked = deadlock
+        var completed = thread.Join(TimeSpan.FromMilliseconds(500));
+        deadlockDetected = !completed;
+
+        Assert.That(deadlockDetected, Is.False,
+            "Expected no deadlock - GetDataGoodAsync().Result should not deadlock when called from a single-threaded context");
+    }
+
     // TODO: Add GetDataGoodAsync with ConfigureAwait(false)
     // and prove it does NOT deadlock in the same scenario
 }

@@ -17,4 +17,10 @@ public class ConfigureAwaitPitfall
         await Task.Delay(100);
         return "data";
     }
+
+    public async Task<string> GetDataGoodAsync()
+    {
+        await Task.Delay(100).ConfigureAwait(false);
+        return "data";
+    }
 }
